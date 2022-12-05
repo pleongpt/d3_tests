@@ -5,6 +5,9 @@
 
 <script src="https://d3js.org/d3.v4.min.js"></script>
 <script>
+    // circle radius
+    const circleRadius = 10;
+
     // Define the arrowhead marker variables
     const markerBoxWidth = 10;
     const markerBoxHeight = 10;
@@ -141,7 +144,7 @@
       .selectAll("circle")
       .data(nodes)
       .enter().append("circle")
-        .attr("r", 10)
+        .attr("r", circleRadius)
         .attr("fill", getNodeColor)
         .call(dragDrop)
         .on('click', selectNode)
@@ -156,6 +159,7 @@
           .attr("dx", 15)
         .attr("dy", 4)
 
+    // Add the arrowhead marker definition to the svg element
     var arrowHeadElements = svg
         .append('defs')
         .append('marker')
