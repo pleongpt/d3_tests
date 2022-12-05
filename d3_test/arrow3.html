@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+        <script type = "text/javascript" src = "https://d3js.org/d3.v4.min.js"></script>
+        <style>
+         body { font-family: Arial; }
+        </style>
+    </head>
+
+    <body>
+      <div id = "svgcontainer">
+      </div>
+        <script>
+            var width = window.innerWidth
+            var height = window.innerHeight
+            const boxHeight = 200;
+            const svg = d3.select("#svgcontainer")
+                .append("svg")
+                // .attr("width", width)
+                // .attr("height", height)
+                .attr('viewBox', [0, 0, width, boxHeight]);
+
+            // Define the arrowhead marker variables
+            const markerBoxWidth = 20;
+            const markerBoxHeight = 20;
+            const refX = markerBoxWidth / 2;
+            const refY = markerBoxHeight / 2;
+            const markerWidth = markerBoxWidth / 2;
+            const markerHeight = markerBoxHeight / 2;
+            const arrowPoints = [[0, 0], [0, 20], [20, 10]];
+
+            const circles = [
+                { x: width / 3, y: boxHeight / 1.5, r: 50 },
+                { x: width / 1.5, y: boxHeight / 3, r: 50 }
+            ];
+
+            // N.B. For horizontal links, the x position of the link must account for circle radius
+            // and the dimensions of the arrowhead.
+
+            // Source node position of the link must account for radius of the circle
+            const linkSource = {
+                x: circles[0].x + circles[0].r,
+                y: circles[0].y
+            };
+
+            // Target node position of the link must account for radius + arrow width
+            const linkTarget = {
+                x: circles[1].x - circles[0].r - markerWidth,
+                y: circles[1].y
+            };
+
+            // Define a horizontal link from the first circle to the second
+            const link = d3
+            .linkHorizontal()
+            .x(d => d.x)
+            .y(d => d.y)({
+                source: linkSource,
+                target: linkTarget
+            });
+
+            // Add the arrowhead marker definition to the svg element
+            svg
+            .append('defs')
+            .append('marker')
+            .attr('id', 'arrow')
+            .attr('viewBox', [0, 0, markerBoxWidth, markerBoxHeight])
+            .attr('refX', refX)
+            .attr('refY', refY)
+            .attr('markerWidth', markerBoxWidth)
+            .attr('markerHeight', markerBoxHeight)
+            .attr('orient', 'auto-start-reverse')
+            .append('path')
+            .attr('d', d3.line()(arrowPoints))
+            .attr('stroke', 'black');
+
+            // Add circles to the svg element
+            svg
+            .selectAll('circle')
+            .data(circles)
+            .enter().append("circle")
+            // .join('circle')
+            .attr('cx', d => d.x)
+            .attr('cy', d => d.y)
+            .attr('r', d => d.r)
+            .style('fill', 'green');
+
+            // Add the link with arrowhead at the end
+            svg
+            .append('path')
+            .attr('d', link)
+            .attr('marker-end', 'url(#arrow)')
+            .attr('stroke', 'black')
+            .attr('fill', 'none');
+            // svg.node()
+        </script>
+    </body>
+</html>
