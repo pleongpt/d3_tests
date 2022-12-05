@@ -5,186 +5,185 @@
 
 <script src="https://d3js.org/d3.v4.min.js"></script>
 <script>
-  // Define the arrowhead marker variables
-  const markerBoxWidth = 20;
-  const markerBoxHeight = 20;
-  const refX = markerBoxWidth / 2;
-  const refY = markerBoxHeight / 2;
-  const markerWidth = markerBoxWidth / 2;
-  const markerHeight = markerBoxHeight / 2;
-  const arrowPoints = [[0, 0], [0, 20], [20, 10]];
+    // Define the arrowhead marker variables
+    const markerBoxWidth = 20;
+    const markerBoxHeight = 20;
+    const refX = markerBoxWidth / 2;
+    const refY = markerBoxHeight / 2;
+    const markerWidth = markerBoxWidth / 2;
+    const markerHeight = markerBoxHeight / 2;
+    const arrowPoints = [[0, 0], [0, 20], [20, 10]];
 
-var nodes = [
-    { id: 1, group: 0, label: "Introduction", level: 1 },
-    { id: 2, group: 0, label: "Anything to help", level: 1 },
-    { id: 3, group: 0, label: "Where seller is moving to", level: 1 },
-    { id: 4, group: 0, label: "Moving time frame", level: 1 },
-    { id: 5, group: 0, label: "Seller's motivation to sell", level: 1 },
-    { id: 6, group: 0, label: "Seller's motivation level", level: 1 },
-    { id: 7, group: 0, label: "Marketing Methods", level: 1 },
-    { id: 8, group: 0, label: "How sales price was determined", level: 1 },
-    { id: 9, group: 0, label: "Price Flexibility", level: 1 },
-    { id: 10, group: 0, label: "Why selling by owner?", level: 1 },
-    { id: 11, group: 0, label: "Which agent to list with?"  , level: 1 },
-    {id : 12, group: 0, label: "Expectation on the agent", level: 1},
-    {id : 13, group: 0, label: "Timeframe to engage agent", level: 1},
-    {id : 14, group: 0, label: "Under what situation to hire an agent", level: 1},
-    {id : 15, group: 0, label: "Familiar with selling techniques", level: 1},
-    {id : 16, group: 0, label: "When to meet?", level: 1},
-    {id : 17, group: 0, label: "Thanks and end the conversation", level: 1},
-]
+    var nodes = [
+        { id: 1, group: 0, label: "Introduction", level: 1 },
+        { id: 2, group: 0, label: "Anything to help", level: 1 },
+        { id: 3, group: 0, label: "Where seller is moving to", level: 1 },
+        { id: 4, group: 0, label: "Moving time frame", level: 1 },
+        { id: 5, group: 0, label: "Seller's motivation to sell", level: 1 },
+        { id: 6, group: 0, label: "Seller's motivation level", level: 1 },
+        { id: 7, group: 0, label: "Marketing Methods", level: 1 },
+        { id: 8, group: 0, label: "How sales price was determined", level: 1 },
+        { id: 9, group: 0, label: "Price Flexibility", level: 1 },
+        { id: 10, group: 0, label: "Why selling by owner?", level: 1 },
+        { id: 11, group: 0, label: "Which agent to list with?"  , level: 1 },
+        {id : 12, group: 0, label: "Expectation on the agent", level: 1},
+        {id : 13, group: 0, label: "Timeframe to engage agent", level: 1},
+        {id : 14, group: 0, label: "Under what situation to hire an agent", level: 1},
+        {id : 15, group: 0, label: "Familiar with selling techniques", level: 1},
+        {id : 16, group: 0, label: "When to meet?", level: 1},
+        {id : 17, group: 0, label: "Thanks and end the conversation", level: 1},
+    ]
 
-var links = [
-    { target: 2, source: 1, strength: 0.7 },
-    { target: 3, source: 2, strength: 0.7 },
-    { target: 4, source: 3, strength: 0.7 },
-    { target: 5, source: 4, strength: 0.7 },
-    { target: 6, source: 5, strength: 0.7 },
-    { target: 7, source: 6, strength: 0.7 },
-    { target: 8, source: 7, strength: 0.7 },
-    { target: 9, source: 8, strength: 0.7 },
-    { target: 10, source: 9, strength: 0.7 },
-    { target: 11, source: 10, strength: 0.7 },
-    { target: 12, source: 11, strength: 0.7 },
-    { target: 13, source: 12, strength: 0.7 },
-    { target: 14, source: 13, strength: 0.7 },
-    { target: 15, source: 14, strength: 0.7 },
-    { target: 16, source: 15, strength: 0.7 },
-    { target: 17, source: 16, strength: 0.7 }
-]
+    var links = [
+        { target: 2, source: 1, strength: 0.7 },
+        { target: 3, source: 2, strength: 0.7 },
+        { target: 4, source: 3, strength: 0.7 },
+        { target: 5, source: 4, strength: 0.7 },
+        { target: 6, source: 5, strength: 0.7 },
+        { target: 7, source: 6, strength: 0.7 },
+        { target: 8, source: 7, strength: 0.7 },
+        { target: 9, source: 8, strength: 0.7 },
+        { target: 10, source: 9, strength: 0.7 },
+        { target: 11, source: 10, strength: 0.7 },
+        { target: 12, source: 11, strength: 0.7 },
+        { target: 13, source: 12, strength: 0.7 },
+        { target: 14, source: 13, strength: 0.7 },
+        { target: 15, source: 14, strength: 0.7 },
+        { target: 16, source: 15, strength: 0.7 },
+        { target: 17, source: 16, strength: 0.7 }
+    ]
 
-function getNeighbors(node) {
-  return links.reduce(function (neighbors, link) {
-      if (link.target.id === node.id) {
-        neighbors.push(link.source.id)
-      } else if (link.source.id === node.id) {
-        neighbors.push(link.target.id)
+    function getNeighbors(node) {
+      return links.reduce(function (neighbors, link) {
+          if (link.target.id === node.id) {
+            neighbors.push(link.source.id)
+          } else if (link.source.id === node.id) {
+            neighbors.push(link.target.id)
+          }
+          return neighbors
+        },
+        [node.id]
+      )
+    }
+
+    function isNeighborLink(node, link) {
+      return link.target.id === node.id || link.source.id === node.id
+    }
+
+
+    function getNodeColor(node, neighbors) {
+      if (Array.isArray(neighbors) && neighbors.indexOf(node.id) > -1) {
+        return node.level === 1 ? 'blue' : 'green'
       }
-      return neighbors
-    },
-    [node.id]
-  )
-}
 
-function isNeighborLink(node, link) {
-  return link.target.id === node.id || link.source.id === node.id
-}
+      return node.level === 1 ? 'red' : 'gray'
+    }
 
+    function getLinkColor(node, link) {
+      return isNeighborLink(node, link) ? 'green' : '#E5E5E5'
+    }
 
-function getNodeColor(node, neighbors) {
-  if (Array.isArray(neighbors) && neighbors.indexOf(node.id) > -1) {
-    return node.level === 1 ? 'blue' : 'green'
-  }
+    function getTextColor(node, neighbors) {
+      return Array.isArray(neighbors) && neighbors.indexOf(node.id) > -1 ? 'green' : 'black'
+    }
 
-  return node.level === 1 ? 'red' : 'gray'
-}
+    var width = window.innerWidth
+    var height = window.innerHeight
 
+    var svg = d3.select('svg')
+    svg.attr('width', width).attr('height', height)
 
-function getLinkColor(node, link) {
-  return isNeighborLink(node, link) ? 'green' : '#E5E5E5'
-}
+    // simulation setup with all forces
+    var linkForce = d3
+      .forceLink()
+      .id(function (link) { return link.id})
+      .strength(function (link) { return link.strength})
 
-function getTextColor(node, neighbors) {
-  return Array.isArray(neighbors) && neighbors.indexOf(node.id) > -1 ? 'green' : 'black'
-}
+    var simulation = d3
+      .forceSimulation()
+      .force('link', linkForce)
+      .force('charge', d3.forceManyBody().strength(-120))
+      .force('center', d3.forceCenter(width / 2, height / 2))
 
-var width = window.innerWidth
-var height = window.innerHeight
+    var dragDrop = d3.drag().on('start', function (node) {
+      node.fx = node.x
+      node.fy = node.y
+    }).on('drag', function (node) {
+      simulation.alphaTarget(0.7).restart()
+      node.fx = d3.event.x
+      node.fy = d3.event.y
+    }).on('end', function (node) {
+      if (!d3.event.active) {
+        simulation.alphaTarget(0)
+      }
+      node.fx = null
+      node.fy = null
+    })
 
-var svg = d3.select('svg')
-svg.attr('width', width).attr('height', height)
+    function selectNode(selectedNode) {
+      var neighbors = getNeighbors(selectedNode)
 
-// simulation setup with all forces
-var linkForce = d3
-  .forceLink()
-  .id(function (link) { return link.id })
-  .strength(function (link) { return link.strength })
+      // we modify the styles to highlight selected nodes
+      nodeElements.attr('fill', function (node) { return getNodeColor(node, neighbors) })
+      textElements.attr('fill', function (node) { return getTextColor(node, neighbors) })
+      linkElements.attr('stroke', function (link) { return getLinkColor(selectedNode, link) })
+    }
 
-var simulation = d3
-  .forceSimulation()
-  .force('link', linkForce)
-  .force('charge', d3.forceManyBody().strength(-120))
-  .force('center', d3.forceCenter(width / 2, height / 2))
+    var linkElements = svg.append("g")
+      .attr("class", "links")
+      .selectAll("line")
+      .data(links)
+      .enter().append("line")
+        .attr("stroke-width", 2)
+          .attr("stroke", "rgba(50, 50, 50, 0.2)")
 
-var dragDrop = d3.drag().on('start', function (node) {
-  node.fx = node.x
-  node.fy = node.y
-}).on('drag', function (node) {
-  simulation.alphaTarget(0.7).restart()
-  node.fx = d3.event.x
-  node.fy = d3.event.y
-}).on('end', function (node) {
-  if (!d3.event.active) {
-    simulation.alphaTarget(0)
-  }
-  node.fx = null
-  node.fy = null
-})
+    var nodeElements = svg.append("g")
+      .attr("class", "nodes")
+      .selectAll("circle")
+      .data(nodes)
+      .enter().append("circle")
+        .attr("r", 10)
+        .attr("fill", getNodeColor)
+        .call(dragDrop)
+        .on('click', selectNode)
 
-function selectNode(selectedNode) {
-  var neighbors = getNeighbors(selectedNode)
+    var textElements = svg.append("g")
+      .attr("class", "texts")
+      .selectAll("text")
+      .data(nodes)
+      .enter().append("text")
+        .text(function (node) { return  node.label })
+          .attr("font-size", 15)
+          .attr("dx", 15)
+        .attr("dy", 4)
 
-  // we modify the styles to highlight selected nodes
-  nodeElements.attr('fill', function (node) { return getNodeColor(node, neighbors) })
-  textElements.attr('fill', function (node) { return getTextColor(node, neighbors) })
-  linkElements.attr('stroke', function (link) { return getLinkColor(selectedNode, link) })
-}
+    var arrowHead = svg
+        .append('defs')
+        .append('marker')
+        .attr('id', 'arrow')
+        .attr('viewBox', [0, 0, markerBoxWidth, markerBoxHeight])
+        .attr('refX', refX)
+        .attr('refY', refY)
+        .attr('markerWidth', markerBoxWidth)
+        .attr('markerHeight', markerBoxHeight)
+        .attr('orient', 'auto-start-reverse')
+        .append('path')
+        .attr('d', d3.line()(arrowPoints))
+        .attr('stroke', 'black');
 
-var linkElements = svg.append("g")
-  .attr("class", "links")
-  .selectAll("line")
-  .data(links)
-  .enter().append("line")
-    .attr("stroke-width", 2)
-	  .attr("stroke", "rgba(50, 50, 50, 0.2)")
+    simulation.nodes(nodes).on('tick', () => {
+      nodeElements
+        .attr('cx', function (node) { return node.x })
+        .attr('cy', function (node) { return node.y })
+      textElements
+        .attr('x', function (node) { return node.x })
+        .attr('y', function (node) { return node.y })
+      linkElements
+        .attr('x1', function (link) { return link.source.x })
+        .attr('y1', function (link) { return link.source.y })
+        .attr('x2', function (link) { return link.target.x })
+        .attr('y2', function (link) { return link.target.y })
+    })
 
-var nodeElements = svg.append("g")
-  .attr("class", "nodes")
-  .selectAll("circle")
-  .data(nodes)
-  .enter().append("circle")
-    .attr("r", 10)
-    .attr("fill", getNodeColor)
-    .call(dragDrop)
-    .on('click', selectNode)
-
-var textElements = svg.append("g")
-  .attr("class", "texts")
-  .selectAll("text")
-  .data(nodes)
-  .enter().append("text")
-    .text(function (node) { return  node.label })
-	  .attr("font-size", 15)
-	  .attr("dx", 15)
-    .attr("dy", 4)
-
-var arrowHead = svg
-    .append('defs')
-    .append('marker')
-    .attr('id', 'arrow')
-    .attr('viewBox', [0, 0, markerBoxWidth, markerBoxHeight])
-    .attr('refX', refX)
-    .attr('refY', refY)
-    .attr('markerWidth', markerBoxWidth)
-    .attr('markerHeight', markerBoxHeight)
-    .attr('orient', 'auto-start-reverse')
-    .append('path')
-    .attr('d', d3.line()(arrowPoints))
-    .attr('stroke', 'black');
-
-simulation.nodes(nodes).on('tick', () => {
-  nodeElements
-    .attr('cx', function (node) { return node.x })
-    .attr('cy', function (node) { return node.y })
-  textElements
-    .attr('x', function (node) { return node.x })
-    .attr('y', function (node) { return node.y })
-  linkElements
-    .attr('x1', function (link) { return link.source.x })
-    .attr('y1', function (link) { return link.source.y })
-    .attr('x2', function (link) { return link.target.x })
-    .attr('y2', function (link) { return link.target.y })
-})
-
-simulation.force("link").links(links)
+    simulation.force("link").links(links)
 </script>
