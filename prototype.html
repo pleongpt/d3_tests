@@ -6,13 +6,13 @@
 <script src="https://d3js.org/d3.v4.min.js"></script>
 <script>
     // Define the arrowhead marker variables
-    const markerBoxWidth = 20;
-    const markerBoxHeight = 20;
+    const markerBoxWidth = 10;
+    const markerBoxHeight = 10;
     const refX = markerBoxWidth / 2;
     const refY = markerBoxHeight / 2;
     const markerWidth = markerBoxWidth / 2;
     const markerHeight = markerBoxHeight / 2;
-    const arrowPoints = [[0, 0], [0, 20], [20, 10]];
+    const arrowPoints = [[0, 0], [0, 10], [10, 5]];
 
     var nodes = [
         { id: 1, group: 0, label: "Introduction", level: 1 },
@@ -69,7 +69,6 @@
     function isNeighborLink(node, link) {
       return link.target.id === node.id || link.source.id === node.id
     }
-
 
     function getNodeColor(node, neighbors) {
       if (Array.isArray(neighbors) && neighbors.indexOf(node.id) > -1) {
@@ -157,7 +156,7 @@
           .attr("dx", 15)
         .attr("dy", 4)
 
-    var arrowHead = svg
+    var arrowHeadElements = svg
         .append('defs')
         .append('marker')
         .attr('id', 'arrow')
@@ -183,6 +182,9 @@
         .attr('y1', function (link) { return link.source.y })
         .attr('x2', function (link) { return link.target.x })
         .attr('y2', function (link) { return link.target.y })
+        .attr('marker-end', 'url(#arrow)')
+        .attr('stroke', 'black')
+        .attr('fill', 'none')
     })
 
     simulation.force("link").links(links)
