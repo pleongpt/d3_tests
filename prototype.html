@@ -170,8 +170,18 @@
     var simulation = d3
       .forceSimulation()
       .force('link', linkForce)
-      .force('charge', d3.forceManyBody().strength(-30))
+      .force('charge', d3.forceManyBody().strength(-50))
       .force('center', d3.forceCenter(width / 2, height / 2))
+      .force('collision', d3.forceCollide().radius(function(d) {
+        return d.radius + 2
+        })
+      )
+
+    function validate(x, a, b) {
+        if (x < a) x = a;
+        if (x > b) x = b;
+        return x;
+    }
 
     var dragDrop = d3.drag().on('start', function (node) {
       node.fx = node.x
