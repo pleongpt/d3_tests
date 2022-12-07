@@ -11,7 +11,7 @@ function showDialogs() {
     const markerHeight = markerBoxHeight / 2;
     const arrowPoints = [[0, 0], [0, 4], [4, 2]];
 
-    var nodes = [
+    const nodes = [
         {id: "1", group: 0, label: "Introduction", level: 1},
         {id: "2", group: 1, label: "Identify as seller", level: 1},
         {id: "3", group: 0, label: "Anything to help", level: 1},
@@ -58,7 +58,7 @@ function showDialogs() {
         {id: "33", group: 0, label: "Thanks and end the conversation", level: 1},
     ]
 
-    var links = [
+    const links = [
         { target: "2", source: "1", strength: 0.7 },
         { target: "3", source: "2", strength: 0.7 },
         { target: "4a", source: "3", strength: 0.7 },
@@ -149,21 +149,21 @@ function showDialogs() {
       return Array.isArray(neighbors) && neighbors.indexOf(node.id) > -1 ? 'green' : 'black'
     }
 
-    var width = window.innerWidth
-    var height = window.innerHeight
+    const width = window.innerWidth
+    const height = window.innerHeight
 
     console.log(`window.innerWidth=${width} window.innerHeight=${height}`);
 
-    var svg = d3.select('svg')
+    const svg = d3.select('svg')
     svg.attr('width', width).attr('height', height)
 
     // simulation setup with all forces
-    var linkForce = d3
+    const linkForce = d3
       .forceLink()
       .id(function (link) { return link.id})
       .strength(function (link) { return link.strength})
 
-    var simulation = d3
+    const simulation = d3
       .forceSimulation()
       .force('link', linkForce)
       .force('charge', d3.forceManyBody().strength(-50))
@@ -179,7 +179,7 @@ function showDialogs() {
         return x;
     }
 
-    var dragDrop = d3.drag().on('start', function (node) {
+    const dragDrop = d3.drag().on('start', function (node) {
       node.fx = node.x
       node.fy = node.y
     }).on('drag', function (node) {
@@ -195,7 +195,7 @@ function showDialogs() {
     })
 
     function selectNode(selectedNode) {
-      var neighbors = getNeighbors(selectedNode)
+      const neighbors = getNeighbors(selectedNode)
 
       // we modify the styles to highlight selected nodes
       nodeElements.attr('fill', function (node) { return getNodeColor(node, neighbors) })
@@ -203,15 +203,15 @@ function showDialogs() {
       linkElements.attr('stroke', function (link) { return getLinkColor(selectedNode, link) })
     }
 
-    var linkElements = svg.append("g")
+    const linkElements = svg.append("g")
       .attr("class", "links")
       .selectAll("line")
       .data(links)
       .enter().append("line")
-        .attr("stroke-width", 2)
-          .attr("stroke", "rgba(50, 50, 50, 0.2)")
+      .attr("stroke-width", 2)
+      .attr("stroke", "rgba(50, 50, 50, 0.2)")
 
-    var nodeElements = svg.append("g")
+    const nodeElements = svg.append("g")
       .attr("class", "nodes")
       .selectAll("circle")
       .data(nodes)
@@ -221,7 +221,7 @@ function showDialogs() {
         .call(dragDrop)
         .on('click', selectNode)
 
-    var textElements = svg.append("g")
+    const textElements = svg.append("g")
       .attr("class", "texts")
       .selectAll("text")
       .data(nodes)
@@ -232,7 +232,7 @@ function showDialogs() {
         .attr("dy", 4)
 
     // Add the arrowhead marker definition to the svg element
-    var arrowHeadElements = svg
+    const arrowHeadElements = svg
         .append('defs')
         .append('marker')
         .attr('id', 'arrow')
