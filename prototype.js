@@ -113,6 +113,7 @@ function showDialogs() {
         { target: "32b", source: "31", strength: 0.7 },
         { target: "33", source: "32a", strength: 0.7 },
         { target: "33", source: "32b", strength: 0.7 },
+        { target: "1", source: "33", strength: 0.8 },
     ]
 
     function getNeighbors(node) {
@@ -210,6 +211,7 @@ function showDialogs() {
       .enter().append("line")
       .attr("stroke-width", 2)
       .attr("stroke", "rgba(50, 50, 50, 0.2)")
+      .attr("visibility", d => d.target == "1" ? "hidden" : "visible")
 
     const nodeElements = svg.append("g")
       .attr("class", "nodes")
