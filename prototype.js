@@ -63,54 +63,65 @@ function showDialogs() {
         { target: "3", source: "2", strength: 0.7 },
         { target: "4a", source: "3", strength: 0.7 },
         { target: "4b", source: "3", strength: 0.7 },
+        { target: "4b", source: "4a", strength: 0.7},
         { target: "5", source: "4a", strength: 0.7 },
         { target: "5", source: "4b", strength: 0.7 },
         { target: "6a", source: "5", strength: 0.7 },
         { target: "6b", source: "5", strength: 0.7 },
+        { target: "6b", source: "6a", strength: 0.7},
         { target: "7", source: "6a", strength: 0.7 },
         { target: "7", source: "6b", strength: 0.7 },
         { target: "8a", source: "7", strength: 0.7 },
         { target: "8b", source: "7", strength: 0.7 },
+        { target: "8b", source: "8a", strength: 0.7},
         { target: "9", source: "8a", strength: 0.7 },
         { target: "9", source: "8b", strength: 0.7 },
         { target: "10a", source: "9", strength: 0.7 },
         { target: "10b", source: "9", strength: 0.7 },
+        { target: "10b", source: "10a", strength: 0.7},
         { target: "11", source: "10a", strength: 0.7 },
         { target: "11", source: "10b", strength: 0.7 },
         { target: "12", source: "11", strength: 0.7 },
         { target: "13", source: "12", strength: 0.7 },
         { target: "14a", source: "13", strength: 0.7 },
         { target: "14b", source: "13", strength: 0.7 },
+        { target: "14b", source: "14a", strength: 0.7},
         { target: "15", source: "14a", strength: 0.7 },
         { target: "15", source: "14b", strength: 0.7 },
         { target: "16a", source: "15", strength: 0.7 },
         { target: "16b", source: "15", strength: 0.7 },
+        { target: "16b", source: "16a", strength: 0.7},
         { target: "17", source: "16a", strength: 0.7 },
         { target: "17", source: "16b", strength: 0.7 },
         { target: "18a", source: "17", strength: 0.7 },
         { target: "18b", source: "17", strength: 0.7 },
+        { target: "18b", source: "18a", strength: 0.7},
         { target: "19", source: "18a", strength: 0.7 },
         { target: "19", source: "18b", strength: 0.7 },
         { target: "20", source: "19", strength: 0.7 },
         { target: "21", source: "20", strength: 0.7 },
         { target: "22a", source: "21", strength: 0.7 },
         { target: "22b", source: "21", strength: 0.7 },
+        { target: "22b", source: "22a", strength: 0.7},
         { target: "23", source: "22a", strength: 0.7 },
         { target: "23", source: "22b", strength: 0.7 },
         { target: "24", source: "23", strength: 0.7 },
         { target: "25", source: "24", strength: 0.7 },
         { target: "26a", source: "25", strength: 0.7 },
         { target: "26b", source: "25", strength: 0.7 },
+        { target: "26b", source: "26a", strength: 0.7},
         { target: "27", source: "26a", strength: 0.7 },
         { target: "27", source: "26b", strength: 0.7 },
         { target: "28a", source: "27", strength: 0.7 },
         { target: "28b", source: "27", strength: 0.7 },
+        { target: "28b", source: "28a", strength: 0.7},
         { target: "29", source: "28a", strength: 0.7 },
         { target: "29", source: "28b", strength: 0.7 },
         { target: "30", source: "29", strength: 0.7 },
         { target: "31", source: "30", strength: 0.7 },
         { target: "32a", source: "31", strength: 0.7 },
         { target: "32b", source: "31", strength: 0.7 },
+        { target: "32b", source: "32a", strength: 0.7},
         { target: "33", source: "32a", strength: 0.7 },
         { target: "33", source: "32b", strength: 0.7 },
         { target: "1", source: "33", strength: 0.8 },
@@ -169,10 +180,10 @@ function showDialogs() {
       .force('link', linkForce)
       .force('charge', d3.forceManyBody().strength(-50))
       .force('center', d3.forceCenter(width / 2, height / 2))
-      .force('collision', d3.forceCollide().radius(function(d) {
-        return d.radius + 2
-        })
-      )
+      // .force('collision', d3.forceCollide().radius(function(d) {
+      //   return d.radius + 2
+      //   })
+      // )
 
     function validate(x, a, b) {
         if (x < a) x = a;
@@ -184,7 +195,7 @@ function showDialogs() {
       node.fx = node.x
       node.fy = node.y
     }).on('drag', function (node) {
-      simulation.alphaTarget(0.7).restart()
+      simulation.alphaTarget(0.4).restart()
       node.fx = d3.event.x
       node.fy = d3.event.y
     }).on('end', function (node) {
@@ -211,7 +222,7 @@ function showDialogs() {
       .enter().append("line")
       .attr("stroke-width", 2)
       .attr("stroke", "rgba(50, 50, 50, 0.2)")
-      .attr("visibility", d => d.target == "1" ? "hidden" : "visible")
+      .attr("visibility", d => d.target == "1" || (d.source.slice(-1) == "a" && d.target.slice(-1) == "b") ? "hidden" : "visible")
 
     const nodeElements = svg.append("g")
       .attr("class", "nodes")
@@ -230,8 +241,8 @@ function showDialogs() {
       .enter().append("text")
         .text(function (node) { return  node.label })
           .attr("font-size", 15)
-          .attr("dx", 15)
-        .attr("dy", 4)
+          .attr("dx", d => d.id.slice(-1) == "b" ? -120 : 15)
+        .attr("dy", d => d.id.slice(-1) == "b" ? -10: 4)
 
     // Add the arrowhead marker definition to the svg element
     const arrowHeadElements = svg
