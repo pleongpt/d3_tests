@@ -145,20 +145,21 @@ function showDialogs() {
     }
 
     function getNodeColor(node, neighbors) {
-      if (Array.isArray(neighbors) && neighbors.indexOf(node.id) > -1) {
-        return node.group == 0 ? 'blue' : 'red'
-      }
+      // if (Array.isArray(neighbors) && neighbors.indexOf(node.id) > -1) {
+      //   return node.group == 0 ? 'blue' : 'red'
+      // }
 
       return node.group === 0 ? 'blue' : 'red'
     }
 
     function getLinkColor(node, link) {
       // return isNeighborLink(node, link) ? 'green' : '#E5E5E5'
-        return '#E5E5E5';
+        return 'black';
     }
 
     function getTextColor(node, neighbors) {
-      return Array.isArray(neighbors) && neighbors.indexOf(node.id) > -1 ? 'green' : 'black'
+      // return Array.isArray(neighbors) && neighbors.indexOf(node.id) > -1 ? 'green' : 'black'
+        return 'black';
     }
 
     const width = window.innerWidth
@@ -210,7 +211,7 @@ function showDialogs() {
       const neighbors = getNeighbors(selectedNode)
 
       // we modify the styles to highlight selected nodes
-      nodeElements.attr('fill', function (node) { return getNodeColor(node, neighbors) })
+      nodeElements.attr('fill', function (node) { return getNodeColor(node, neighbors) })
       textElements.attr('fill', function (node) { return getTextColor(node, neighbors) })
       linkElements.attr('stroke', function (link) { return getLinkColor(selectedNode, link) })
     }
